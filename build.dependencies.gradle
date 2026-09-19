@@ -1,6 +1,10 @@
 repositories {
     mavenCentral()
     google() // Needed for androidx
+    maven { url = 'https://central.sonatype.com/repository/maven-snapshots/'}
+    maven { url 'https://jitpack.io' }
+    mavenLocal()
+    maven { url = "https://mymaven.bylazar.com/releases" }
 }
 
 dependencies {
@@ -13,5 +17,16 @@ dependencies {
     implementation 'org.firstinspires.ftc:FtcCommon:12.0.0'
     implementation 'org.firstinspires.ftc:Vision:12.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
+
+    implementation 'com.pedropathing:ftc:2.1.2'
+    implementation 'com.pedropathing:telemetry:1.0.0'
+    implementation 'com.pedropathing:ivy:1.0.0'
+    implementation 'com.github.Thermal-Equilibrium:homeostasis-FTC:1.0.8'
+    implementation 'com.pedropathing:telemetry:1.0.0'
+    //implementation 'com.bylazar:fullpanels:1.0.12'
+
+    implementation('com.github.haifengl:smile-interpolation:2.6.0') {
+        exclude group: 'org.slf4j'
+    }
 }
 
