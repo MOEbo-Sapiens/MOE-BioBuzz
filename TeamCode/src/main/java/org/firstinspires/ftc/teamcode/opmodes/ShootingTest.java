@@ -157,8 +157,14 @@ public class ShootingTest extends LinearOpMode {
                 intakeSpeed -= 0.1;
             }
 
-            if (gamepad1.startWasPressed()) {
+            /*if (gamepad1.startWasPressed()) {
                 useUpperHive = !useUpperHive;
+            }*/
+
+            if (follower.getPose().getY() < 72){
+                useUpperHive = false;
+            } else {
+                useUpperHive = true;
             }
 
             if (!useUpperHive) {
