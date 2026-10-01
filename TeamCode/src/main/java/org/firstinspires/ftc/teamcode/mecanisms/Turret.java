@@ -1,19 +1,17 @@
 package org.firstinspires.ftc.teamcode.mecanisms;
 
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.helpers.Config;
+import org.firstinspires.ftc.teamcode.helpers.RobotConfig;
 
-import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.hardware.actuators.NextServo;
 import dev.nextftc.robot.Mechanism;
 
 public class Turret implements Mechanism {
     public static double turretOffsetRad = 0;
 
-    NextServo turretServoF;
-    NextServo turretServoB;
+    NextServo turretServoF = new NextServo(RobotConfig.turretServoFName, 0.0025, RobotConfig.turretServoFDirection);
+    NextServo turretServoB = new NextServo(RobotConfig.turretServoBName, 0.0025, RobotConfig.turretServoBDirection);
 
     //    public static double MIN_TURRET_ANGLE = Math.toRadians(-151);
 //    public static double MAX_TURRET_ANGLE = Math.toRadians(146.5);
@@ -39,15 +37,6 @@ public class Turret implements Mechanism {
 
     public double MIN_SERVO_POS = Math.min(getServoPosFromAngle(MIN_TURRET_ANGLE), getServoPosFromAngle(MAX_TURRET_ANGLE));
     public double MAX_SERVO_POS = Math.max(getServoPosFromAngle(MIN_TURRET_ANGLE), getServoPosFromAngle(MAX_TURRET_ANGLE));
-
-    public Turret() {
-        this.turretServoF = new NextServo(Config.turretServoFName, 0.0025);
-//        turretServoF = hardwareMap.get(Servo.class, "turretFront");
-        turretServoF.setDirection(Config.turretServoFDirection);
-        this.turretServoB = new NextServo(Config.turretServoBName, 0.0025);
-//        turretServoB = hardwareMap.get(Servo.class, "turretBack");
-        turretServoB.setDirection(Config.turretServoBDirection);
-    }
 
     public double getTargetPosition() {
         return turretServoF.getPosition();

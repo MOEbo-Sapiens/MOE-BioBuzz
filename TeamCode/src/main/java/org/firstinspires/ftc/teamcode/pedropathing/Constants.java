@@ -2,16 +2,12 @@ package org.firstinspires.ftc.teamcode.pedropathing;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.revhub.drivetrains.MecanumConfig;
-import com.pedropathing.revhub.localizers.Encoder;
 import com.pedropathing.revhub.localizers.PinpointConfig;
-import com.pedropathing.revhub.localizers.RevHubIMU;
-import com.pedropathing.revhub.localizers.TwoWheelConfig;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.helpers.Config;
+import org.firstinspires.ftc.teamcode.helpers.RobotConfig;
 
 public class Constants {
     public static Follower create(HardwareMap h) {
@@ -21,15 +17,15 @@ public class Constants {
 
     public static MecanumConfig driveConfig = new MecanumConfig(
             c -> {
-                c.frontLeftName.set(Config.frontLeftName);
-                c.backLeftName.set(Config.backLeftName);
-                c.frontRightName.set(Config.frontRightName);
-                c.backRightName.set(Config.backRightName);
+                c.frontLeftName.set(RobotConfig.frontLeftName);
+                c.backLeftName.set(RobotConfig.backLeftName);
+                c.frontRightName.set(RobotConfig.frontRightName);
+                c.backRightName.set(RobotConfig.backRightName);
 
-                c.frontLeftDirection.set(Config.frontLeftDirection.getSdkDirection());
-                c.backLeftDirection.set(Config.backLeftDirection.getSdkDirection());
-                c.frontRightDirection.set(Config.frontRightDirection.getSdkDirection());
-                c.backRightDirection.set(Config.backRightDirection.getSdkDirection());
+                c.frontLeftDirection.set(RobotConfig.frontLeftDirection.getSdkDirection());
+                c.backLeftDirection.set(RobotConfig.backLeftDirection.getSdkDirection());
+                c.frontRightDirection.set(RobotConfig.frontRightDirection.getSdkDirection());
+                c.backRightDirection.set(RobotConfig.backRightDirection.getSdkDirection());
             }
     );
 

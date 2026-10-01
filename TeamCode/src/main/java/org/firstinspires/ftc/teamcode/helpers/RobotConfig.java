@@ -2,8 +2,12 @@ package org.firstinspires.ftc.teamcode.helpers;
 
 import dev.nextftc.hardware.actuators.NextMotor.Direction;
 
-public class Config {
+public class RobotConfig {
     // Settings
+
+    public static boolean lastOpModeWasAuto = false;
+
+
 
     // region Control Hub
 
