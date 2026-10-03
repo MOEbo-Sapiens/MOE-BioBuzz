@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.helpers;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.math.Vector;
 import com.pedropathing.math.Vector2D;
@@ -17,6 +18,7 @@ import java.util.stream.IntStream;
 
 @Config
 public class VelocityCompensationCalculator {
+    private static final ShotParameters latestShot = new ShotParameters();
     public static double minFarZoneSpeed = 1690;
     public static double maxAutoSpeed = 1450;
 
@@ -229,5 +231,27 @@ public class VelocityCompensationCalculator {
                 currentPose.y() + velocityCompensation.toVector2D().y(),
                 currentPose.heading()
         );
+    }
+
+    public static void update(Follower follower) {
+        calculate(
+                follower.pose(),
+                follower.velocity().toVector(),
+                follower.velocity().omega,
+                HivePoses.getCurrentHivePose(),
+                latestShot
+        );
+    }
+
+    public static double getHoodAngle() {
+        return latestShot.hoodAngle;
+    }
+
+    public static double getTurretAngle() {
+        return latestShot.turretAngle;
+    }
+
+    public static double getFlywheelTicks() {
+        return latestShot.flywheelTicks;
     }
 }

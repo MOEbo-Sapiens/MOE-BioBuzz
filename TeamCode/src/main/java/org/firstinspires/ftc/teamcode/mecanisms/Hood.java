@@ -8,9 +8,10 @@ import org.firstinspires.ftc.teamcode.helpers.VelocityCompensationCalculator;
 
 import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.hardware.actuators.NextServo;
+import dev.nextftc.robot.Mechanism;
 import smile.interpolation.LinearInterpolation;
 
-public class Hood {
+public class Hood implements Mechanism {
     private NextServo hoodServo = new NextServo("hood", 0.005, NextMotor.Direction.REVERSE);
 
     public static double MIN_HOOD_ANGLE = Math.toRadians(31.398); //TODO: find
@@ -70,5 +71,10 @@ public class Hood {
 
     public double getCurrentHoodAngle() {
         return servoToHoodAngle.interpolate(getCurrentPosition());
+    }
+
+    @Override
+    public void periodic() {
+        setHoodAngle(VelocityCompensationCalculator.getHoodAngle());
     }
 }

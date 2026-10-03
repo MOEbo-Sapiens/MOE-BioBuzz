@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.mecanisms;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.helpers.RobotConfig;
+import org.firstinspires.ftc.teamcode.helpers.VelocityCompensationCalculator;
 
 import dev.nextftc.hardware.actuators.NextServo;
 import dev.nextftc.robot.Mechanism;
@@ -66,5 +67,10 @@ public class Turret implements Mechanism {
                         MAX_SERVO_POS
                 )
         );
+    }
+
+    @Override
+    public void periodic() {
+        setTurretAngle(VelocityCompensationCalculator.getTurretAngle());
     }
 }

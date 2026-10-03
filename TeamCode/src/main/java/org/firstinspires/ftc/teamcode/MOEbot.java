@@ -1,14 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
+import androidx.annotation.NonNull;
+
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.helpers.HivePoses;
+import org.firstinspires.ftc.teamcode.helpers.VelocityCompensationCalculator;
 import org.firstinspires.ftc.teamcode.mecanisms.Drivetrain;
+import org.firstinspires.ftc.teamcode.mecanisms.Hood;
+import org.firstinspires.ftc.teamcode.mecanisms.Turret;
 import org.firstinspires.ftc.teamcode.pedropathing.Constants;
 
+import java.util.Set;
+
 import dev.nextftc.hardware.RobotController;
+import dev.nextftc.robot.Mechanism;
 import dev.nextftc.robot.NextRobot;
-import dev.nextftc.robot.drive.DriveCommands;
 
 public class MOEbot implements NextRobot {
     public Follower follower;
@@ -16,6 +24,8 @@ public class MOEbot implements NextRobot {
 
     // Mechanisms
     private final Drivetrain drivetrain = new Drivetrain();
+    private final Hood hood = new Hood();
+    private final Turret turret = new Turret();
 
     public MOEbot(){}
 
@@ -30,7 +40,24 @@ public class MOEbot implements NextRobot {
     public Drivetrain getDrivetrain() {
         return drivetrain;
     }
+    public Hood getHood() {
+        return hood;
+    }
+    public Turret getTurret() {
+        return turret;
+    }
     public void startDrive(Gamepad gamepad) {
         drivetrain.startDrive(gamepad);
+    }
+    public void periodic() {
+        HivePoses.update(getFollower());
+        VelocityCompensationCalculator.update(getFollower());
+
+    }
+
+    @NonNull
+    @Override
+    public Set<Mechanism> getMechanisms() {
+        return Set.of(drivetrain, hood, turret);
     }
 }
