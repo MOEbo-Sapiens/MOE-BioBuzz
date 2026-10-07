@@ -49,9 +49,12 @@ public class MOEbot implements NextRobot {
     public void startDrive(Gamepad gamepad) {
         drivetrain.startDrive(gamepad);
     }
+
+    @Override
     public void periodic() {
         HivePoses.update(getFollower());
         VelocityCompensationCalculator.update(getFollower());
+        getDrivetrain().updatePolygonPoses(getFollower());
 
     }
 

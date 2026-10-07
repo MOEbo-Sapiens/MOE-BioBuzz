@@ -4,6 +4,8 @@ import dev.nextftc.hardware.actuators.NextMotor.Direction;
 
 public class RobotConfig {
     // Settings
+    public static double robotWidth = 18;
+    public static double robotLength = 18;
 
     public static boolean lastOpModeWasAuto = false;
 
