@@ -1,15 +1,21 @@
 package org.firstinspires.ftc.teamcode.mecanisms;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.controllers.Controller;
+import com.pedropathing.controllers.PIDController;
+import com.qualcomm.hardware.lynx.LynxVoltageSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.firstinspires.ftc.teamcode.MOEbot;
 import org.firstinspires.ftc.teamcode.helpers.RobotConfig;
 
+import dev.nextftc.control.feedback.PIDCoefficients;
 import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.robot.Mechanism;
+import dev.nextftc.robot.NextRobot;
 import dev.nextftc.units.Measure;
 import dev.nextftc.units.Units;
 import dev.nextftc.units.measuretypes.AngularVelocity;
@@ -26,11 +32,9 @@ public class Flywheel implements Mechanism {
 
     private AngularVelocity target = new AngularVelocity(0, Units.RadiansPerSecond);
     private boolean activated = false;
+    private double voltage = 12;
 
-    VoltageSensor voltageSensor;
-
-    public Flywheel(HardwareMap hardwareMap, VoltageSensor voltageSensor) {
-        this.voltageSensor = voltageSensor;
+    public Flywheel() {
 
         shooterMotorL.setDirection(NextMotor.Direction.FORWARD);
         shooterMotorR.setDirection(NextMotor.Direction.REVERSE);
@@ -108,11 +112,19 @@ public class Flywheel implements Mechanism {
         }
     }
 
-    public void update() {
+    public void updateVoltage(double voltage) {
+        this.voltage = voltage;
+    }
+
+    @Override
+    public void periodic() {
         if (activated) {
-            AngularVelocity power =  (getTargetAngularVelocity().times(kV)).plus(getTargetAngularVelocity().minus(getCurrentAngularVel()).times(kP).plus(kS));
-            power.times(12)
-                    .div(voltageSensor.getVoltage());
+            AngularVelocity power = // (target * kv) + kP * (target - current) + kS
+                    (getTargetAngularVelocity().times(kV))
+                    .plus(getTargetAngularVelocity().minus(getCurrentAngularVel()).times(kP)
+                    .plus(kS));
+            power = power.times(12) // power * 12
+            .div(voltage); // div voltage
             setPower(power);
         }
     }

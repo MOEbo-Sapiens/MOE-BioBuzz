@@ -9,13 +9,11 @@ import dev.nextftc.hardware.actuators.NextServo;
 import dev.nextftc.robot.Mechanism;
 
 public class Turret implements Mechanism {
-    public static double turretOffsetRad = 0;
-
     NextServo turretServoF = new NextServo(RobotConfig.turretServoFName, 0.0025, RobotConfig.turretServoFDirection);
     NextServo turretServoB = new NextServo(RobotConfig.turretServoBName, 0.0025, RobotConfig.turretServoBDirection);
 
-    //    public static double MIN_TURRET_ANGLE = Math.toRadians(-151);
-//    public static double MAX_TURRET_ANGLE = Math.toRadians(146.5);
+
+    public static double turretOffsetRad = 0;
     public static double MIN_TURRET_ANGLE = Math.toRadians(-157);
     public static double MAX_TURRET_ANGLE = Math.toRadians(157);
 
