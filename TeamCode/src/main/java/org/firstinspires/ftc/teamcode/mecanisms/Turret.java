@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.mecanisms;
 
+import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.helpers.RobotConfig;
@@ -12,6 +13,7 @@ public class Turret implements Mechanism {
     NextServo turretServoF = new NextServo(RobotConfig.turretServoFName, 0.0025, RobotConfig.turretServoFDirection);
     NextServo turretServoB = new NextServo(RobotConfig.turretServoBName, 0.0025, RobotConfig.turretServoBDirection);
 
+    private boolean autoAimEnabled = true;
 
     public static double turretOffsetRad = 0;
     public static double MIN_TURRET_ANGLE = Math.toRadians(-157);
@@ -53,22 +55,27 @@ public class Turret implements Mechanism {
         return getAngleFromServoPos(turretServoF.getPosition());
     }
 
-    public void setTargetServoPosition(double pos) {
-        turretServoF.setPosition(pos);
-        turretServoB.setPosition(pos);
+    public Command setTargetServoPosition(double pos) {
+        return instant(() -> {
+            turretServoF.setPosition(pos);
+            turretServoB.setPosition(pos);
+        });
     }
 
-    public void setTurretAngle(double angleRad) {
-        setTargetServoPosition(
+    public Command setTurretAngle(double angleRad) {
+        return instant(() -> setTargetServoPosition(
                 Range.clip(getServoPosFromAngle(angleRad + turretOffsetRad),
                         MIN_SERVO_POS,
                         MAX_SERVO_POS
                 )
-        );
+        ));
     }
+
 
     @Override
     public void periodic() {
-        setTurretAngle(VelocityCompensationCalculator.getTurretAngle());
+        if (autoAimEnabled) {
+            setTurretAngle(VelocityCompensationCalculator.getTurretAngle());
+        }
     }
 }

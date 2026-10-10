@@ -11,6 +11,9 @@ import org.firstinspires.ftc.teamcode.helpers.HivePoses;
 import org.firstinspires.ftc.teamcode.helpers.MathHelpers;
 import org.firstinspires.ftc.teamcode.mecanisms.Hood;
 
+import dev.nextftc.units.Unit;
+import dev.nextftc.units.Units;
+import dev.nextftc.units.measuretypes.AngularVelocity;
 import smile.interpolation.LinearInterpolation;
 
 import java.util.Arrays;
@@ -253,5 +256,8 @@ public class VelocityCompensationCalculator {
 
     public static double getFlywheelTicks() {
         return latestShot.flywheelTicks;
+    }
+    public static AngularVelocity getFlywheelRotationsPerSecond() {
+        return Units.RotationsPerSecond.of(latestShot.flywheelTicks / 28);
     }
 }

@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.mecanisms;
 
+import static dev.nextftc.units.Units.RadiansPerSecond;
+import static dev.nextftc.units.Units.Rotations;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.controllers.Controller;
 import com.pedropathing.controllers.PIDController;
@@ -11,13 +14,16 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.MOEbot;
 import org.firstinspires.ftc.teamcode.helpers.RobotConfig;
+import org.firstinspires.ftc.teamcode.helpers.VelocityCompensationCalculator;
 
 import dev.nextftc.control.feedback.PIDCoefficients;
 import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.robot.Mechanism;
 import dev.nextftc.robot.NextRobot;
 import dev.nextftc.units.Measure;
+import dev.nextftc.units.Unit;
 import dev.nextftc.units.Units;
+import dev.nextftc.units.measuretypes.Angle;
 import dev.nextftc.units.measuretypes.AngularVelocity;
 import dev.nextftc.units.measuretypes.Current;
 import dev.nextftc.units.unittypes.AngularVelocityUnit;
@@ -27,42 +33,24 @@ public class Flywheel implements Mechanism {
     private NextMotor shooterMotorL = new NextMotor("leftFlywheel");
     private NextMotor shooterMotorR = new NextMotor("rightFlywheel");
 
-    public static double kV = 0.000375, kP = 0.003; //TODO: TUNE VALUES
-    public static AngularVelocity kS = new AngularVelocity(0.08, Units.RadiansPerSecond);
+    public static double kV = 0.000375, kP = 0.003, kS = 0.08; //TODO: TUNE VALUES
 
-    private AngularVelocity target = new AngularVelocity(0, Units.RadiansPerSecond);
-    private boolean activated = false;
+    private AngularVelocity target = RadiansPerSecond.of(0);
+    private boolean activated = true;
     private double voltage = 12;
 
     public Flywheel() {
+        shooterMotorR.follow(shooterMotorL, NextMotor.Direction.REVERSE);
 
         shooterMotorL.setDirection(NextMotor.Direction.FORWARD);
-        shooterMotorR.setDirection(NextMotor.Direction.REVERSE);
 
         shooterMotorL.setZeroPowerBehavior(NextMotor.ZeroPowerBehavior.FLOAT);
-        shooterMotorR.setZeroPowerBehavior(NextMotor.ZeroPowerBehavior.FLOAT);
-    }
 
-    /**
-     *
-     * @param ticksPerSecond motor speed in ticks per second
-     * @return flywheel speed in radians per second
-     */
-    public static double motorTicksToFlywheelRadians(double ticksPerSecond) {
-        //28 -- ticks per rotation
-        // 1.4 -- ratio of flywheel velocity to motor velocity
-        return (ticksPerSecond / 28) * 2 * Math.PI * 1.4;
-    }
+        shooterMotorL.getVelocityConstants().setKV(kV);
+        shooterMotorL.getVelocityConstants().setKP(kP);
+        shooterMotorL.getVelocityConstants().setKS(kS);
 
-    /**
-     *
-     * @param radiansPerSecond flywheel speed in radians per second
-     * @return motor speed in ticks per second
-     */
-    public static double flywheelRadiansToMotorTicks(double radiansPerSecond) {
-        //28 -- ticks per rotation
-        // 1.4 -- ratio of flywheel velocity to motor velocity
-        return (radiansPerSecond / (2 * Math.PI * 1.4)) * 28;
+        shooterMotorL.setAnglePerCount(Rotations.of(28));
     }
 
 
@@ -81,12 +69,11 @@ public class Flywheel implements Mechanism {
 
     public void setPower(AngularVelocity power) {
         shooterMotorL.setVelocitySetpoint(power);
-        shooterMotorR.setVelocitySetpoint(power);
     }
 
     public void deactivate() {
         activated = false;
-        setPower(new AngularVelocity(0, Units.RadiansPerSecond));
+        setPower(new AngularVelocity(0, RadiansPerSecond));
     }
 
     public void activate() {
@@ -108,7 +95,7 @@ public class Flywheel implements Mechanism {
     public void toggle() {
         activated = !activated;
         if (!activated) {
-            setPower(new AngularVelocity(0, Units.RadiansPerSecond));
+            setPower(RadiansPerSecond.of(0));
         }
     }
 
@@ -119,13 +106,7 @@ public class Flywheel implements Mechanism {
     @Override
     public void periodic() {
         if (activated) {
-            AngularVelocity power = // (target * kv) + kP * (target - current) + kS
-                    (getTargetAngularVelocity().times(kV))
-                    .plus(getTargetAngularVelocity().minus(getCurrentAngularVel()).times(kP)
-                    .plus(kS));
-            power = power.times(12) // power * 12
-            .div(voltage); // div voltage
-            setPower(power);
+            setTargetAngularVelocity(VelocityCompensationCalculator.getFlywheelRotationsPerSecond());
         }
     }
 }
