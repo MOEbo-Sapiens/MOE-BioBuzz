@@ -21,10 +21,11 @@ import java.util.Set;
 import dev.nextftc.hardware.RobotController;
 import dev.nextftc.robot.Mechanism;
 import dev.nextftc.robot.NextRobot;
+import dev.nextftc.robot.Telemetry;
 
 public class MOEbot implements NextRobot {
     public Follower follower;
-    public final VoltageSensor voltageSensor;
+    //public final VoltageSensor voltageSensor;
 
 
     // Mechanisms
@@ -34,8 +35,8 @@ public class MOEbot implements NextRobot {
     private final Flywheel flywheel = new Flywheel();
     private final GateServo gateServo = new GateServo();
 
-    public MOEbot (HardwareMap hardwareMap){
-        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+    public MOEbot (){
+        //voltageSensor = hardwareMap.voltageSensor.iterator().next();
     }
 
     public Follower getFollower() {
@@ -71,7 +72,9 @@ public class MOEbot implements NextRobot {
         HivePoses.update(getFollower());
         VelocityCompensationCalculator.update(getFollower());
         getDrivetrain().updatePolygonPoses(getFollower());
-        getFlywheel().updateVoltage(voltageSensor.getVoltage());
+        //getFlywheel().updateVoltage(voltageSensor.getVoltage());
+        getFollower().update();
+        Telemetry.update();
     }
 
     @NonNull

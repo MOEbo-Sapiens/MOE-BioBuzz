@@ -13,6 +13,7 @@ import dev.nextftc.hardware.RobotController;
 import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.robot.Mechanism;
 import dev.nextftc.robot.NextRobot;
+import dev.nextftc.robot.Telemetry;
 import dev.nextftc.robot.drive.DriveCommands;
 
 public class Drivetrain implements Mechanism {
@@ -49,5 +50,10 @@ public class Drivetrain implements Mechanism {
         } else {
             return robotZone.isFullyInside(blueUpperZone) || robotZone.isFullyInside(blueLowerZone);
         }
+    }
+
+    @Override
+    public void periodic() {
+        Telemetry.log("Can shoot", canShoot());
     }
 }
