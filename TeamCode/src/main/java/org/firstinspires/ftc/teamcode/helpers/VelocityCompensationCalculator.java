@@ -141,11 +141,11 @@ public class VelocityCompensationCalculator {
      * @param angularVel Angular velocity (omega in rad/s)
      * @param goalPose Goal Position (x,y)
      */
-    public static ShotParameters calculate(Pose robotPose, Vector robotVel, double angularVel, Pose goalPose) {
+    public static ShotParameters calculate(Pose robotPose, Vector2D robotVel, double angularVel, Pose goalPose) {
         return calculate(robotPose, robotVel, angularVel, goalPose, new ShotParameters());
     }
 
-    public static ShotParameters calculate(Pose robotPose, Vector robotVel, double angularVel, Pose goalPose, ShotParameters output) {
+    public static ShotParameters calculate(Pose robotPose, Vector2D robotVel, double angularVel, Pose goalPose, ShotParameters output) {
 
         //shooter offset
         double cosH = Math.cos(robotPose.heading());
@@ -160,8 +160,8 @@ public class VelocityCompensationCalculator {
         double dist = Math.sqrt(dx * dx + dy * dy);
         double angleToGoal = Math.atan2(dy, dx);
 
-        Vector shootingVector = new Vector(1, angleToGoal);
-        Vector tangentVector = new Vector(1, angleToGoal + Math.PI/2);
+        Vector2D shootingVector = Vector2D.polar(1, angleToGoal);
+        Vector2D tangentVector = Vector2D.polar(1, angleToGoal + Math.PI/2);
 
         //velocity decomposition (constant across iterations)
         double vRad = robotVel.dot(shootingVector);
@@ -239,7 +239,7 @@ public class VelocityCompensationCalculator {
     public static void update(Follower follower) {
         calculate(
                 follower.pose(),
-                follower.velocity().toVector(),
+                follower.velocity().toVector2D(),
                 follower.velocity().omega,
                 HivePoses.getCurrentHivePose(),
                 latestShot

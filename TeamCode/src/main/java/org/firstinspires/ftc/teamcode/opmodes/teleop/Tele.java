@@ -30,9 +30,9 @@ public class Tele extends NextOpMode {
         this.robot = robot;
 
         robot.getFollower().setPose(startPose);
+        robot.startDrive(gamepad1);
         Alliance.color = Alliance.BLUE;
         //setPoses();
-        Scheduler.reset();
 
     }
     //default startPose
@@ -44,7 +44,6 @@ public class Tele extends NextOpMode {
         robot.getFollower().setPose(startPose);
         Alliance.color = Alliance.BLUE;
         //setPoses();
-        Scheduler.reset();
 
         //setColor();
     }
@@ -55,8 +54,8 @@ public class Tele extends NextOpMode {
 
     @Override
     public void periodic() {
-        Scheduler.execute();
         robot.getFollower().update();
+        Telemetry.log("gamepady", gamepad1.left_stick_y);
     }
 
 

@@ -30,11 +30,16 @@ public class Drivetrain implements Mechanism {
         backLeft.setDirection(RobotConfig.backLeftDirection);
         backRight.setDirection(RobotConfig.backRightDirection);
     }
+    public final NextMotor frontLeft = new NextMotor(RobotConfig.frontLeftName);
+    public final NextMotor frontRight = new NextMotor(RobotConfig.frontRightName);
+    public final NextMotor backLeft = new NextMotor(RobotConfig.backLeftName);
+    public final NextMotor backRight = new NextMotor(RobotConfig.backRightName);
 
-    public final NextMotor frontLeft = new NextMotor(RobotController.controlHub(), RobotConfig.frontLeftPort);
-    public final NextMotor frontRight = new NextMotor(RobotController.controlHub(), RobotConfig.frontRightPort);
-    public final NextMotor backLeft = new NextMotor(RobotController.controlHub(), RobotConfig.backLeftPort);
-    public final NextMotor backRight = new NextMotor(RobotController.controlHub(), RobotConfig.backRightPort);
+
+    /*public final NextMotor frontLeft = new NextMotor(RobotConfig.frontLeftHub, RobotConfig.frontLeftPort);
+    public final NextMotor frontRight = new NextMotor(RobotConfig.frontRightHub, RobotConfig.frontRightPort);
+    public final NextMotor backLeft = new NextMotor(RobotConfig.backLeftHub, RobotConfig.backLeftPort);
+    public final NextMotor backRight = new NextMotor(RobotConfig.backRightHub, RobotConfig.backRightPort);*/
 
     public void startDrive(Gamepad gamepad) {
         DriveCommands.mecanumDrive(frontLeft, frontRight, backLeft, backRight, gamepad).schedule();
