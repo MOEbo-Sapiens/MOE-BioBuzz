@@ -30,7 +30,6 @@ public class Tele extends NextOpMode {
         this.robot = robot;
 
         robot.getFollower().setPose(startPose);
-        robot.startDrive(gamepad1);
         Alliance.color = Alliance.BLUE;
         //setPoses();
 
@@ -39,10 +38,17 @@ public class Tele extends NextOpMode {
     //length: 15.28
     //width: 15.12
 
+    // Init loop
+    @Override
+    public void disabledPeriodic(){
 
-    public void initialize() {
-        robot.getFollower().setPose(startPose);
-        Alliance.color = Alliance.BLUE;
+    }
+
+
+    // Run once, after play button clicked
+    @Override
+    public void start() {
+        robot.startDrive(gamepad1);
         //setPoses();
 
         //setColor();

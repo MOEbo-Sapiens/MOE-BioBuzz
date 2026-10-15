@@ -64,7 +64,7 @@ public class MOEbot implements NextRobot {
     }
 
     public void startDrive(Gamepad gamepad) {
-        drivetrain.startDrive(gamepad);
+        drivetrain.startDrive(gamepad, getFollower());
     }
 
     @Override

@@ -7,11 +7,9 @@ import com.pedropathing.math.Vector;
 import com.pedropathing.math.Vector2D;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.helpers.HivePoses;
-import org.firstinspires.ftc.teamcode.helpers.MathHelpers;
+import org.firstinspires.ftc.teamcode.helpers.math.MathHelpers;
 import org.firstinspires.ftc.teamcode.mecanisms.Hood;
 
-import dev.nextftc.units.Unit;
 import dev.nextftc.units.Units;
 import dev.nextftc.units.measuretypes.AngularVelocity;
 import smile.interpolation.LinearInterpolation;

@@ -8,6 +8,7 @@ import com.skeletonarmy.marrow.zones.PolygonZone;
 import org.firstinspires.ftc.teamcode.MOEbot;
 import org.firstinspires.ftc.teamcode.helpers.Alliance;
 import org.firstinspires.ftc.teamcode.helpers.RobotConfig;
+import org.firstinspires.ftc.teamcode.helpers.drivetrains.MecanumHeadingLock;
 
 import dev.nextftc.hardware.RobotController;
 import dev.nextftc.hardware.actuators.NextMotor;
@@ -41,8 +42,8 @@ public class Drivetrain implements Mechanism {
     public final NextMotor backLeft = new NextMotor(RobotConfig.backLeftHub, RobotConfig.backLeftPort);
     public final NextMotor backRight = new NextMotor(RobotConfig.backRightHub, RobotConfig.backRightPort);*/
 
-    public void startDrive(Gamepad gamepad) {
-        DriveCommands.mecanumDrive(frontLeft, frontRight, backLeft, backRight, gamepad).schedule();
+    public void startDrive(Gamepad gamepad, Follower follower) {
+        MecanumHeadingLock.MecanumHeadingLock(frontLeft, frontRight, backLeft, backRight, gamepad, follower).schedule();
     }
 
     public void updatePolygonPoses(Follower follower) {

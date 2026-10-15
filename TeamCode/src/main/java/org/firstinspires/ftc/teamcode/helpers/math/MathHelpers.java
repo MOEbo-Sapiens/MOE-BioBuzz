@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.helpers;
+package org.firstinspires.ftc.teamcode.helpers.math;
 
 public class MathHelpers {
     public static double wrapAngleRadians(double angle) {
