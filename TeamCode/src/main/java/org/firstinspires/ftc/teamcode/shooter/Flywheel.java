@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.shooter;
 
-import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.robot.Constants;
 import org.firstinspires.ftc.teamcode.util.hardware.MotorEx;
 
-@Config
+//@Config
 public class Flywheel {
     private MotorEx shooterMotorL;
     private MotorEx shooterMotorR;

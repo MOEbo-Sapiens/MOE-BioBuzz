@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.shooter.Turret;
 
-@Config
+//@Config
 public class Constants {
     public static Pose BLUE_GOAL_POSE = new Pose(3, 133.5, Math.toRadians(0));
     public static Pose RED_GOAL_POSE = new Pose(133.5, 136.5, Math.toRadians(0));

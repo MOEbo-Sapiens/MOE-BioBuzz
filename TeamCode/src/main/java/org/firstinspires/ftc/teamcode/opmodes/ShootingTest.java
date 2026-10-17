@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.acmerobotics.dashboard.FtcDashboard;
+//import com.acmerobotics.dashboard.FtcDashboard;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -30,7 +30,7 @@ public class ShootingTest extends LinearOpMode {
     private double current = 0;
     private double maxCurrent = 0;
 
-    FtcDashboard dashboard;
+    //FtcDashboard dashboard;
 
     double intakeSpeed = 1;
 
@@ -62,8 +62,8 @@ public class ShootingTest extends LinearOpMode {
         telemetry = new FastTelemetry(telemetry);
         Constants.color = Constants.Color.BLUE;
 
-        dashboard = FtcDashboard.getInstance();
-        dashboardTelem = dashboard.getTelemetry();
+//        dashboard = FtcDashboard.getInstance();
+//        dashboardTelem = dashboard.getTelemetry();
 
         follower =  PedroConstants.createPinpointFollower(hardwareMap);
         Pose startPose = new Pose(8.61, 36.924, 0);

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.drivetrains;
 
-import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedroPathing.PedroConstants;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
-@Config
+//@Config
 public class SwerveHeadingLock extends Swerve {
     private static final double HEADING_POWER_MIN = -1.0;
     private static final double HEADING_POWER_MAX = 1.0;

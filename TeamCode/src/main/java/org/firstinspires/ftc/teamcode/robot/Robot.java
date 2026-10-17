@@ -8,7 +8,7 @@ import static com.pedropathing.ivy.groups.Groups.sequential;
 
 import android.media.MediaTimestamp;
 
-import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.field.Style;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.pedropathing.follower.Follower;
@@ -38,7 +38,7 @@ import org.firstinspires.ftc.teamcode.vision.MT1Localizer;
 
 import java.util.function.DoubleSupplier;
 
-@Config
+//@Config
 public class Robot {
     private double maxCurrent = 0;
 

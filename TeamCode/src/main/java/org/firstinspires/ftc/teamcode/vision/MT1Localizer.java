@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.vision;
 
-import com.bylazar.configurables.annotations.Configurable;
+//import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ftc.FTCCoordinates;
 import com.pedropathing.ftc.PoseConverter;
@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Drawing;
 import org.firstinspires.ftc.teamcode.pedroPathing.FusionLocalizer;
 import org.firstinspires.ftc.teamcode.shooter.VelocityCompensationCalculator;
 
-@Configurable
+//@Configurable
 public class MT1Localizer {
 
     public static final double llXOffset = 4.4144; // INCHES

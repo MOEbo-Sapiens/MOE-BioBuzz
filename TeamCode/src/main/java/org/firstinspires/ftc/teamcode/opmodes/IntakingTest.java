@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.acmerobotics.dashboard.FtcDashboard;
+//import com.acmerobotics.dashboard.FtcDashboard;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -25,7 +25,7 @@ import java.util.List;
 @TeleOp
 public class IntakingTest extends LinearOpMode {
 
-    FtcDashboard dashboard;
+    //FtcDashboard dashboard;
 
     PTO pto;
 
@@ -42,8 +42,8 @@ public class IntakingTest extends LinearOpMode {
 
         telemetry = new FastTelemetry(telemetry);
 
-        dashboard = FtcDashboard.getInstance();
-        dashboardTelem = dashboard.getTelemetry();
+//        dashboard = FtcDashboard.getInstance();
+//        dashboardTelem = dashboard.getTelemetry();
 
         pto = new PTO(hardwareMap);
 

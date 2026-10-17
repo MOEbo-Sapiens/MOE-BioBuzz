@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.drivetrains;
 
-import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.robot.Constants;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.util.Vector2D;
 
-@Config
+//@Config
 public class AngleSwerve extends Swerve {
     private static final double HEADING_POWER_MIN = -1.0;
     private static final double HEADING_POWER_MAX = 1.0;

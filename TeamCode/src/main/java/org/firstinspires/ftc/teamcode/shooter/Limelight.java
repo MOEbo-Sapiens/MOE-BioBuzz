@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.shooter;
 
-import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ftc.FTCCoordinates;
 import com.pedropathing.ftc.PoseConverter;
@@ -20,7 +20,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.pedroPathing.Drawing;
 
 
-@Config
+//@Config
 public class Limelight {
     Limelight3A limelight;
 

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.shooter;
 
 import static org.firstinspires.ftc.teamcode.shooter.Shooter.distance;
 
-import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
 import com.qualcomm.robotcore.util.Range;
@@ -15,7 +15,7 @@ import smile.interpolation.LinearInterpolation;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-@Config
+//@Config
 public class VelocityCompensationCalculator {
     public static double minFarZoneSpeed = 1690;
     public static double maxAutoSpeed = 1450;
