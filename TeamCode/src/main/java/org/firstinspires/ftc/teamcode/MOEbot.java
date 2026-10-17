@@ -74,7 +74,6 @@ public class MOEbot implements NextRobot {
         getDrivetrain().updatePolygonPoses(getFollower());
         //getFlywheel().updateVoltage(voltageSensor.getVoltage());
         getFollower().update();
-        Telemetry.update();
     }
 
     @NonNull

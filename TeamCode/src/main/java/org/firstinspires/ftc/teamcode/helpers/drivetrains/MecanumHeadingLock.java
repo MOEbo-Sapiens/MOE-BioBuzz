@@ -6,6 +6,7 @@ import com.pedropathing.ivy.commands.Commands;
 import com.pedropathing.utils.Angle;
 import com.pedropathing.utils.Utils;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.helpers.Alliance;
 import org.firstinspires.ftc.teamcode.helpers.math.MathHelpers;
@@ -25,7 +26,7 @@ public class MecanumHeadingLock {
     public static double ROTATE_STICK_THRESHOLD = 0.025;
     public static double ANGULAR_VELOCITY_THRESHOLD = 0.2;
 
-    private final PIDController anglePID = new PIDController(5.752843168584152);
+    private final PIDController anglePID = new PIDController(1.5, 0, 0.2);
 
     private final PIDController headingPID =
             new PIDController(anglePID.getCoefficients());
@@ -33,13 +34,13 @@ public class MecanumHeadingLock {
     private boolean headingLockActive = false;
     private double targetHeading = 0.0;
 
-    public static Command MecanumHeadingLock(NextMotor frontLeft, NextMotor frontRight, NextMotor backLeft, NextMotor backRight,
-                                             Gamepad gamepad,
-                                             Follower follower) {
-        MecanumHeadingLock mecanumHeadingLock = new MecanumHeadingLock();
-        return Commands.infinite(() -> {
-            mecanumHeadingLock.arcade(gamepad.left_stick_y, gamepad.left_stick_x, gamepad.right_stick_x, follower);
-        });
+    private NextMotor frontLeft, frontRight, backLeft, backRight;
+
+    public MecanumHeadingLock(NextMotor frontLeft, NextMotor frontRight, NextMotor backLeft, NextMotor backRight){
+        this.frontLeft = frontLeft;
+        this.frontRight = frontRight;
+        this.backLeft = backLeft;
+        this.backRight = backRight;
     }
 
     public void arcade(double forward, double strafe, double rotateX, Follower follower) {
@@ -48,20 +49,19 @@ public class MecanumHeadingLock {
         double theta = 0;
         double heading = follower.pose().heading();
 
-        if (Alliance.color == Alliance.RED) {
-            theta = -heading;
-        } else if (Alliance.color == Alliance.BLUE) {
-            theta = MathHelpers.wrapAngleRadians(-heading + Math.toRadians(180));
-        } /*else if (Alliance.color == Alliance.AUDIENCE) {
-                theta = MathHelpers.wrapAngleRadians(-heading + Math.toRadians(90));
-            }*/
 
-        double cos = Math.cos(theta);
-        double sin = Math.sin(theta);
-        double strafeRot = strafe * cos - forward * sin;
-        double forwardRot = strafe * sin + forward * cos;
-        strafe = strafeRot;
-        forward = forwardRot;
+//        if (Alliance.color == Alliance.RED) {
+//            theta = -heading;
+//        } else if (Alliance.color == Alliance.BLUE) {
+//            theta = MathHelpers.wrapAngleRadians(-heading + Math.toRadians(180));
+//        }
+//
+//        double cos = Math.cos(theta);
+//        double sin = Math.sin(theta);
+//        double strafeRot = strafe * cos - forward * sin;
+//        double forwardRot = strafe * sin + forward * cos;
+//        strafe = strafeRot;
+//        forward = forwardRot;
 
 
         double angularVelocityRadPerSec = follower.velocity().omega;
@@ -81,7 +81,31 @@ public class MecanumHeadingLock {
             headingPower = -calculateHeadingPower(targetHeading, heading);
         }
 
+        mecanumPower(forward, strafe, headingPower, 1.0, 1.0);
 
+
+    }
+
+    public Command headingLock(Gamepad gamepad, Follower follower) {
+        return Commands.infinite(() -> {
+            arcade(-gamepad.left_stick_y, gamepad.left_stick_x, gamepad.right_stick_x, follower);
+        });
+    }
+
+    public void mecanumPower(double forward, double strafe, double rotateX, double speed, double rotSpeed) {
+
+        rotateX *= rotSpeed;
+        double denominator = Math.max(Math.abs(forward) + Math.abs(strafe) + Math.abs(rotateX), 1);
+        double frontLeftPower = (forward + strafe + rotateX) / denominator;
+        double backLeftPower = (forward - strafe + rotateX) / denominator;
+        double frontRightPower = (forward - strafe - rotateX) / denominator;
+        double backRightPower = (forward + strafe - rotateX) / denominator;
+
+
+        frontLeft.setThrottle(frontLeftPower);
+        backLeft.setThrottle(backLeftPower);
+        frontRight.setThrottle(frontRightPower);
+        backRight.setThrottle(backRightPower);
     }
 
     private double calculateHeadingPower(double targetHeading, double currentHeading) {

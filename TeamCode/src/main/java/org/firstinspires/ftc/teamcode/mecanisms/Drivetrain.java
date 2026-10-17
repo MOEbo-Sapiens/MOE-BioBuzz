@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.mecanisms;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.skeletonarmy.marrow.zones.Point;
 import com.skeletonarmy.marrow.zones.PolygonZone;
@@ -9,7 +10,9 @@ import org.firstinspires.ftc.teamcode.MOEbot;
 import org.firstinspires.ftc.teamcode.helpers.Alliance;
 import org.firstinspires.ftc.teamcode.helpers.RobotConfig;
 import org.firstinspires.ftc.teamcode.helpers.drivetrains.MecanumHeadingLock;
+import org.firstinspires.ftc.teamcode.opmodes.teleop.Tele;
 
+import dev.nextftc.control.drive.MecanumKinematics;
 import dev.nextftc.hardware.RobotController;
 import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.robot.Mechanism;
@@ -36,14 +39,14 @@ public class Drivetrain implements Mechanism {
     public final NextMotor backLeft = new NextMotor(RobotConfig.backLeftName);
     public final NextMotor backRight = new NextMotor(RobotConfig.backRightName);
 
-
     /*public final NextMotor frontLeft = new NextMotor(RobotConfig.frontLeftHub, RobotConfig.frontLeftPort);
     public final NextMotor frontRight = new NextMotor(RobotConfig.frontRightHub, RobotConfig.frontRightPort);
     public final NextMotor backLeft = new NextMotor(RobotConfig.backLeftHub, RobotConfig.backLeftPort);
     public final NextMotor backRight = new NextMotor(RobotConfig.backRightHub, RobotConfig.backRightPort);*/
 
     public void startDrive(Gamepad gamepad, Follower follower) {
-        MecanumHeadingLock.MecanumHeadingLock(frontLeft, frontRight, backLeft, backRight, gamepad, follower).schedule();
+        MecanumHeadingLock mecanumHeadingLock = new MecanumHeadingLock(frontLeft, frontRight, backLeft, backRight);
+        mecanumHeadingLock.headingLock(gamepad, follower).schedule();
     }
 
     public void updatePolygonPoses(Follower follower) {

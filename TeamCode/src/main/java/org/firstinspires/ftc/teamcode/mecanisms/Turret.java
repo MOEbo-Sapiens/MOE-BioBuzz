@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.mecanisms;
 
 import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.helpers.RobotConfig;
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.helpers.VelocityCompensationCalculator;
 
 import dev.nextftc.hardware.actuators.NextServo;
 import dev.nextftc.robot.Mechanism;
+import dev.nextftc.robot.Telemetry;
 
 public class Turret implements Mechanism {
     NextServo turretServoF = new NextServo(RobotConfig.turretServoFName, 0.0025, RobotConfig.turretServoFDirection);
@@ -74,8 +76,10 @@ public class Turret implements Mechanism {
 
     @Override
     public void periodic() {
-        if (autoAimEnabled) {
-            setTurretAngle(VelocityCompensationCalculator.getTurretAngle());
-        }
+        setTurretAngle(VelocityCompensationCalculator.getTurretAngle()).schedule();
+        Telemetry.log("Servo Pos Angle", Range.clip(getServoPosFromAngle(VelocityCompensationCalculator.getTurretAngle() + turretOffsetRad),
+                MIN_SERVO_POS,
+                MAX_SERVO_POS
+        ));
     }
 }
