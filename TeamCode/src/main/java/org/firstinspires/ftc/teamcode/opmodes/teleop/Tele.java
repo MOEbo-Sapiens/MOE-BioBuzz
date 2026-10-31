@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.pedropathing.ivy.commands.Commands;
 import com.pedropathing.math.Pose;
 
@@ -26,6 +27,8 @@ public class Tele extends NextOpMode {
         robot.getFollower().setPose(startPose);
         Alliance.color = Alliance.BLUE;
 
+        Telemetry.addBackend(FtcDashboard.getInstance().getTelemetry());
+
 
 
         //setPoses();
@@ -46,7 +49,8 @@ public class Tele extends NextOpMode {
     @Override
     public void start() {
         robot.startDrive(gamepad1);
-        robot.getFlywheel().activate();
+        robot.getFlywheel().activate().schedule();
+        robot.getTurret().activate().schedule();
         //setPoses();
 
         //setColor();
@@ -60,5 +64,6 @@ public class Tele extends NextOpMode {
     public void periodic() {
         robot.getFollower().update();
         Telemetry.log("gamepady", gamepad1.left_stick_y);
+        Telemetry.log("position", robot.getFollower().pose());
     }
 }

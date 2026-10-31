@@ -57,26 +57,27 @@ public class Turret implements Mechanism {
         return getAngleFromServoPos(turretServoF.getPosition());
     }
 
-    public Command setTargetServoPosition(double pos) {
-        return instant(() -> {
-            turretServoF.setPosition(pos);
-            turretServoB.setPosition(pos);
-        });
+    public void setTargetServoPosition(double pos) {
+        turretServoF.setPosition(pos);
+        turretServoB.setPosition(pos);
     }
 
-    public Command setTurretAngle(double angleRad) {
-        return instant(() -> setTargetServoPosition(
-                Range.clip(getServoPosFromAngle(angleRad + turretOffsetRad),
-                        MIN_SERVO_POS,
-                        MAX_SERVO_POS
-                )
-        ));
+    public void setTurretAngle(double angleRad) {
+        setTargetServoPosition(
+            Range.clip(getServoPosFromAngle(angleRad + turretOffsetRad),
+                MIN_SERVO_POS,
+                MAX_SERVO_POS
+            )
+        );
+    }
+
+    public Command activate() {
+        return infinite(() -> setTurretAngle(VelocityCompensationCalculator.getTurretAngle()));
     }
 
 
     @Override
     public void periodic() {
-        setTurretAngle(VelocityCompensationCalculator.getTurretAngle()).schedule();
         Telemetry.log("Servo Pos Angle", Range.clip(getServoPosFromAngle(VelocityCompensationCalculator.getTurretAngle() + turretOffsetRad),
                 MIN_SERVO_POS,
                 MAX_SERVO_POS

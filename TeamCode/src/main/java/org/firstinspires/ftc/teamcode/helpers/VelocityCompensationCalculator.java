@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.helpers.math.MathHelpers;
 import org.firstinspires.ftc.teamcode.mecanisms.Hood;
 
+import dev.nextftc.robot.Telemetry;
 import dev.nextftc.units.Units;
 import dev.nextftc.units.measuretypes.AngularVelocity;
 import smile.interpolation.LinearInterpolation;
@@ -242,6 +243,8 @@ public class VelocityCompensationCalculator {
                 HivePoses.getCurrentHivePose(),
                 latestShot
         );
+        Telemetry.log("Flywheel ticks", getFlywheelRotationsPerSecond());
+        Telemetry.log("Turret angle", getTurretAngle());
     }
 
     public static double getHoodAngle() {
