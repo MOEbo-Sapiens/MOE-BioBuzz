@@ -31,7 +31,7 @@ public class Intake implements Mechanism {
     }
 
     public boolean isBeamBroken() {
-        return !beam1.isTriggered() || !beam2.isTriggered();
+        return beam1.isTriggered() || beam2.isTriggered();
     }
 
     public Current getCurrent() {
