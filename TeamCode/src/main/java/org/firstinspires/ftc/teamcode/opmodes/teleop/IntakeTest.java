@@ -39,6 +39,7 @@ public class IntakeTest extends NextOpMode {
         CommandGamepad gp1 = new CommandGamepad(gamepad1);
         gp1.leftBumper().onTrue(robot.getIntake().runIntake(1));
         gp1.rightBumper().onTrue(robot.getIntake().runIntake(-1));
+        gp1.leftBumper().or(gp1.rightBumper()).onFalse(robot.getIntake().runIntake(0));
     }
 
     @Override
