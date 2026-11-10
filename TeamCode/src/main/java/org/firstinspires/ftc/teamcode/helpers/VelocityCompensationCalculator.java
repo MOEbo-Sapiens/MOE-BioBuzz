@@ -101,6 +101,10 @@ public class VelocityCompensationCalculator {
             .mapToDouble(i -> flywheelSpeedValues[i]-20)
             .toArray();
 
+    public static AngularVelocity[] adjustedFlywheelVelocities = IntStream.range(0, adjustedFlywheelSpeedValues.length)
+            .mapToObj(i -> new AngularVelocity(adjustedFlywheelSpeedValues[i], Units.RotationsPerSecond))
+            .toArray(AngularVelocity[]::new);
+
 
     // Interpolators
     public static LinearInterpolation speedInterpolation = new LinearInterpolation(distances, adjustedFlywheelSpeedValues);
@@ -259,6 +263,6 @@ public class VelocityCompensationCalculator {
         return latestShot.flywheelTicks;
     }
     public static AngularVelocity getFlywheelRotationsPerSecond() {
-        return Units.RotationsPerSecond.of(latestShot.flywheelTicks / 28);
+        return Units.RotationsPerSecond.of(latestShot.flywheelTicks);
     }
 }

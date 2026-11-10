@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.mecanisms;
 import static dev.nextftc.units.Units.Radians;
 import static dev.nextftc.units.Units.RadiansPerSecond;
 import static dev.nextftc.units.Units.Rotations;
+import static dev.nextftc.units.Units.RotationsPerSecond;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -16,12 +17,14 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.MOEbot;
 import org.firstinspires.ftc.teamcode.helpers.RobotConfig;
 import org.firstinspires.ftc.teamcode.helpers.VelocityCompensationCalculator;
 import org.firstinspires.ftc.teamcode.opmodes.teleop.Tele;
 
 import dev.nextftc.control.feedback.PIDCoefficients;
+import dev.nextftc.hardware.RobotController;
 import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.robot.Mechanism;
 import dev.nextftc.robot.NextRobot;
@@ -38,24 +41,23 @@ import dev.nextftc.units.unittypes.AngularVelocityUnit;
 public class Flywheel implements Mechanism {
     private final NextMotor shooterMotorL = new NextMotor("leftFlywheel");
     private final NextMotor shooterMotorR = new NextMotor("rightFlywheel");
+    private final VoltageSensor voltageSensor;
 
-    public static double kV = 0, kP = 0, kS = 0; //TODO: TUNE VALUES
-
-    private AngularVelocity target = RadiansPerSecond.of(0);
+    public static double kS = 0.08, kV = 0.000375, kP = 0.003; //TODO: TUNE VALUES
     private boolean activated = true;
-    private double voltage = 12;
+
+    private double power = 0.0;
+    private double error = 0.0;
 
     public Flywheel() {
         shooterMotorL.setDirection(NextMotor.Direction.FORWARD);
+        shooterMotorL.setZeroPowerBehavior(NextMotor.ZeroPowerBehavior.FLOAT);
+        shooterMotorR.setZeroPowerBehavior(NextMotor.ZeroPowerBehavior.FLOAT);
         shooterMotorR.follow(shooterMotorL, NextMotor.Direction.REVERSE);
 
-        shooterMotorL.setZeroPowerBehavior(NextMotor.ZeroPowerBehavior.FLOAT);
+        shooterMotorL.setAnglePerCount(Rotations.of(1));
 
-        shooterMotorL.getVelocityConstants().setKV(kV);
-        shooterMotorL.getVelocityConstants().setKP(kP);
-        shooterMotorL.getVelocityConstants().setKS(kS);
-
-        shooterMotorL.setAnglePerCount(new Angle(0.2244, Radians));
+        voltageSensor = RobotController.hardwareMap().get(VoltageSensor.class, "Control Hub");
     }
 
 
@@ -63,8 +65,25 @@ public class Flywheel implements Mechanism {
         return shooterMotorL.getEncoderVelocity();
     }
 
+    public double getDoubleCurrentAngularVelocity() {
+        return getCurrentAngularVel().getMagnitude();
+    }
+
     public void setTargetAngularVelocity(AngularVelocity target) {
-        this.target = target;
+        double targetVelocity = getTargetAngularVelocity().getMagnitude();
+        double measuredVelocity = getCurrentAngularVel().getMagnitude();
+
+        error = targetVelocity - measuredVelocity;
+
+        power =
+                (kV * targetVelocity)
+                        + (kP * (targetVelocity - measuredVelocity))
+                        + kS;
+
+        double batteryVoltage = voltageSensor.getVoltage();
+        power *= (12.0 / batteryVoltage);
+
+        setPower(Math.max(Math.min(power, 1.0), -1.0));
     }
 
 
@@ -72,17 +91,17 @@ public class Flywheel implements Mechanism {
         return VelocityCompensationCalculator.getFlywheelRotationsPerSecond();
     }
 
-    public void setPower(AngularVelocity power) {
-        shooterMotorL.setVelocitySetpoint(power);
+    public void setPower(double power) {
+        shooterMotorL.setThrottle(power);
     }
 
     public void deactivate() {
         activated = false;
-        setPower(new AngularVelocity(0, RadiansPerSecond));
+        setPower(0);
     }
 
     public Command activate() {
-        return infinite(() -> shooterMotorL.setVelocitySetpoint(VelocityCompensationCalculator.getFlywheelRotationsPerSecond()));
+        return infinite(() -> setTargetAngularVelocity(VelocityCompensationCalculator.getFlywheelRotationsPerSecond()));
     }
 
     public boolean isReady() {
@@ -100,27 +119,23 @@ public class Flywheel implements Mechanism {
     public void toggle() {
         activated = !activated;
         if (!activated) {
-            setPower(RadiansPerSecond.of(0));
+            setPower(0);
         }
-    }
-
-    public void updateVoltage(double voltage) {
-        this.voltage = voltage;
     }
 
     @Override
     public void periodic() {
-        Telemetry.log("flywheel encoder vel", shooterMotorL.getEncoderVelocity());
-        Telemetry.log("flywheel throttle", shooterMotorL.getThrottle());
-        Telemetry.log("flywheel is ready", isReady());
+        Telemetry.log("Current Flywheel Vel", getCurrentAngularVel().getMagnitude());
+        Telemetry.log("Target Flywheel Vel", getTargetAngularVelocity().getMagnitude());
 
-        Telemetry.log("Current Flyhweel Vel", VelocityCompensationCalculator.getFlywheelTicks());
-        Telemetry.log("Target Flyhweel Vel", getTargetAngularVelocity().getMagnitude());
-        Telemetry.log("Flywheel Current", getCurrent());
 
-        shooterMotorL.getVelocityConstants().setKV(kV);
-        shooterMotorL.getVelocityConstants().setKP(kP);
-        shooterMotorL.getVelocityConstants().setKS(kS);
+        Telemetry.log("Voltage", voltageSensor.getVoltage());
+
+        Telemetry.log("Ticks/Second Target", getTargetAngularVelocity());
+        Telemetry.log("Ticks/Second Actual", shooterMotorL.getEncoderVelocity());
+
+        Telemetry.log("Flywheel Throttle", power);
+        Telemetry.log("Flywheel Velocity Error", error);
     }
 
 }
