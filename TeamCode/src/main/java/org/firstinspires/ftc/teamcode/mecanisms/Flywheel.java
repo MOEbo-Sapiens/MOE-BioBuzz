@@ -43,7 +43,7 @@ public class Flywheel implements Mechanism {
     private final NextMotor shooterMotorR = new NextMotor("rightFlywheel");
     private final VoltageSensor voltageSensor;
 
-    public static double kS = 0.08, kV = 0.000375, kP = 0.003; //TODO: TUNE VALUES
+    public static double kS = 0.09, kV = 0.000059, kP = 0.004;
     private boolean activated = true;
 
     private double power = 0.0;
@@ -74,6 +74,10 @@ public class Flywheel implements Mechanism {
         double measuredVelocity = getCurrentAngularVel().getMagnitude();
 
         error = targetVelocity - measuredVelocity;
+
+        if (getTargetAngularVelocity().isNear(RotationsPerSecond.of(0), 0.05)) {
+            kS = 0;
+        }
 
         power =
                 (kV * targetVelocity)
